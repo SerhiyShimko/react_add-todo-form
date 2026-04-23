@@ -3,7 +3,6 @@ import { TodoList } from './components/TodoList';
 import { useState } from 'react';
 import usersFromServer from './api/users';
 import todosFromServer from './api/todos';
-import { title } from 'process';
 import { Todo } from './type/Todo';
 import { User } from './type/User';
 
@@ -76,8 +75,6 @@ export const App = () => {
 
         return false;
       })!;
-
-      console.log(maxId + 1);
 
       const newTodo: Todo = {
         id: maxId + 1,

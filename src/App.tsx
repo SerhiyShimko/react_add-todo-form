@@ -39,31 +39,29 @@ export const App = () => {
     setNewTitle('');
   };
 
-  const validationTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const word = String(e.target.value);
+  const validationTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const word = String(event.target.value);
     let valid: boolean = true;
 
-    word.split('').map(w => {
+    word.split('').map(letter => {
       if (
-        !NUMBER.includes(w) &&
-        !UKRAINIAN_SUMBOLS.includes(w) &&
-        !ENGLISH_SUMBOLS.includes(w) &&
-        !UKRAINIAN_SUMBOLS.toUpperCase().includes(w) &&
-        !ENGLISH_SUMBOLS.toUpperCase().includes(w)
+        !NUMBER.includes(letter) &&
+        !UKRAINIAN_SUMBOLS.includes(letter) &&
+        !ENGLISH_SUMBOLS.includes(letter) &&
+        !UKRAINIAN_SUMBOLS.toUpperCase().includes(letter) &&
+        !ENGLISH_SUMBOLS.toUpperCase().includes(letter)
       ) {
         valid = false;
       }
     });
 
     if (valid) {
-      setNewTitle(e.target.value);
-    } else {
-      return;
+      setNewTitle(event.target.value);
     }
   };
 
-  const validationForm = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const validationForm = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     setSubmit(true);
 
     if (newUser !== 0 && newTitle !== '') {
@@ -97,8 +95,8 @@ export const App = () => {
       <form
         action="/api/todos"
         method="POST"
-        onSubmit={e => {
-          validationForm(e);
+        onSubmit={event => {
+          validationForm(event);
         }}
       >
         <div className="field">
@@ -109,8 +107,8 @@ export const App = () => {
             placeholder="title..."
             data-cy="titleInput"
             value={newTitle}
-            onChange={e => {
-              validationTitle(e);
+            onChange={event => {
+              validationTitle(event);
             }}
           />
           {submit && !newTitle && (
@@ -124,8 +122,8 @@ export const App = () => {
             data-cy="userSelect"
             value={newUser}
             id="select"
-            onChange={e => {
-              setNewUser(+e.target.value);
+            onChange={event => {
+              setNewUser(+event.target.value);
             }}
           >
             <option value="0" disabled>

@@ -10,13 +10,17 @@ const ENGLISH_SUMBOLS = 'abcdefhijgklmnopqrstuvwxyz';
 const UKRAINIAN_SUMBOLS = 'абвгдеєжзиіїйклмнопрстуфхцчшщьюя';
 const NUMBER = ' 0123456789';
 
+const getUserById = (firstId: number, secondId: number) => {
+  if (firstId === secondId) {
+    return true;
+  }
+
+  return false;
+};
+
 const todosWithUser = todosFromServer.map(todo => {
   const userNow: User = usersFromServer.find((user: User) => {
-    if (user.id === todo.userId) {
-      return true;
-    }
-
-    return false;
+    return getUserById(+user.id, +todo.userId);
   })!;
 
   return {
@@ -41,23 +45,25 @@ export const App = () => {
 
   const validationTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
     const word = String(event.target.value);
-    let valid: boolean = true;
 
-    word.split('').map(letter => {
-      if (
-        !NUMBER.includes(letter) &&
-        !UKRAINIAN_SUMBOLS.includes(letter) &&
-        !ENGLISH_SUMBOLS.includes(letter) &&
-        !UKRAINIAN_SUMBOLS.toUpperCase().includes(letter) &&
-        !ENGLISH_SUMBOLS.toUpperCase().includes(letter)
-      ) {
-        valid = false;
-      }
-    });
+    const filterWord = word
+      .split('')
+      .filter(currentLetter => {
+        if (
+          !NUMBER.includes(currentLetter) &&
+          !UKRAINIAN_SUMBOLS.includes(currentLetter) &&
+          !ENGLISH_SUMBOLS.includes(currentLetter) &&
+          !UKRAINIAN_SUMBOLS.toUpperCase().includes(currentLetter) &&
+          !ENGLISH_SUMBOLS.toUpperCase().includes(currentLetter)
+        ) {
+          return false;
+        }
 
-    if (valid) {
-      setNewTitle(event.target.value);
-    }
+        return true;
+      })
+      .join('');
+
+    setNewTitle(filterWord);
   };
 
   const validationForm = (event: React.FormEvent<HTMLFormElement>) => {
@@ -67,11 +73,7 @@ export const App = () => {
     if (newUser !== 0 && newTitle !== '') {
       const maxId = Math.max(0, ...todos.map((todo: Todo) => +todo.id));
       const userNow: User = usersFromServer.find((user: User) => {
-        if (user.id === newUser) {
-          return true;
-        }
-
-        return false;
+        return getUserById(user.id, +newUser);
       })!;
 
       const newTodo: Todo = {
